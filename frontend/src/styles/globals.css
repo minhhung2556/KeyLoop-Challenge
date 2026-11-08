@@ -1,0 +1,275 @@
+/* Font families are loaded via next/font in _app.js (siteFonts.ts). */
+@config "../../tailwind.config.js";
+@import "tailwindcss";
+
+@import './theme.css';
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html[data-cookie-consent="set"] [data-cookie-banner] {
+    display: none !important;
+  }
+
+  html[data-auth-hint="1"] .guest-hero-root {
+    display: none;
+  }
+
+  body {
+    @apply bg-background text-foreground leading-relaxed;
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif text-foreground;
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    @apply leading-relaxed;
+    color: var(--muted-foreground);
+    font-family: var(--font-sans);
+  }
+
+  a {
+    @apply transition-colors duration-200;
+  }
+
+  img {
+    @apply select-none;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-accent border border-transparent rounded-md shadow-sm hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-all duration-200 transform hover:scale-105;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-8 py-4 text-base font-medium text-foreground bg-background border border-border rounded-md shadow-sm hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-all duration-200;
+  }
+
+  .section-padding {
+    @apply py-24 lg:py-32;
+  }
+
+  .profile-section-padding {
+    @apply py-8 sm:py-10 lg:py-12;
+  }
+
+  .about-section-padding {
+    @apply py-16 lg:py-20;
+  }
+
+  .container-width {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .text-gradient {
+    @apply bg-linear-to-r from-accent to-accent bg-clip-text text-transparent;
+  }
+
+  .hero-text {
+    @apply text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-serif font-extrabold leading-tight tracking-tight;
+  }
+
+  .feature-card {
+    @apply p-8 bg-card rounded-2xl shadow-sm border border-border hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1;
+  }
+
+  .glass-card {
+    @apply relative overflow-hidden rounded-3xl border border-white/60 bg-white/80 dark:bg-white/5 dark:border-white/10 shadow-sm backdrop-blur-md;
+  }
+
+  .gradient-stroke {
+    @apply relative inline-flex items-center justify-center rounded-full bg-linear-to-r from-accent to-accent p-px;
+  }
+
+  .gradient-stroke>span {
+    @apply rounded-full bg-background px-4 py-2 text-sm font-medium text-accent dark:text-accent;
+  }
+
+  .section-eyebrow {
+    @apply inline-flex items-center space-x-2 rounded-full bg-muted dark:bg-accent/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent dark:text-accent;
+  }
+
+  .section-subtitle {
+    @apply text-lg md:text-xl;
+    color: var(--muted-foreground);
+  }
+
+  .animate-on-scroll {
+    @apply opacity-0 translate-y-8 transition-all duration-700 ease-out;
+  }
+
+  .animate-on-scroll.visible {
+    @apply opacity-100 translate-y-0;
+  }
+
+  /* Custom design islands inherit typography/colors from the design itself. */
+  .my-design-island p,
+  .my-design-island h1,
+  .my-design-island h2,
+  .my-design-island h3,
+  .my-design-island h4,
+  .my-design-island h5,
+  .my-design-island h6 {
+    color: inherit;
+    font-family: inherit;
+    letter-spacing: inherit;
+  }
+
+  .my-design-island .markdown-text,
+  .my-design-island .markdown-text p,
+  .my-design-island .markdown-text li,
+  .my-design-island .markdown-text strong,
+  .my-design-island .markdown-text blockquote,
+  .my-design-island .markdown-text td,
+  .my-design-island .markdown-text th {
+    color: inherit;
+    font-family: inherit;
+  }
+
+  .my-design-island .markdown-text a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .my-design-island .markdown-text code,
+  .my-design-island .markdown-text pre {
+    background-color: transparent;
+  }
+
+  .markdown-text img,
+  .my-design-island .markdown-text img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+@layer utilities {
+  .focus-ring-accent {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  .focus-ring-danger {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
+
+/* Outside @layer utilities so Tailwind still emits membership badge glow. */
+.membership-badge-glow {
+  animation: hooemi-membership-glow 2.5s ease-in-out infinite;
+}
+
+.membership-badge-shine {
+  position: relative;
+}
+
+.membership-badge-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  -webkit-mask-image: url("/assets/icons/membership-badge.svg");
+  mask-image: url("/assets/icons/membership-badge.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  background: linear-gradient(
+    115deg,
+    transparent 32%,
+    color-mix(in srgb, white 70%, var(--accent)) 46%,
+    color-mix(in srgb, white 92%, transparent) 50%,
+    color-mix(in srgb, white 70%, var(--accent)) 54%,
+    transparent 68%
+  );
+  background-size: 260% 260%;
+  animation: hooemi-membership-shine 2.5s ease-in-out infinite;
+}
+
+@keyframes hooemi-membership-glow {
+  0%,
+  100% {
+    filter: drop-shadow(
+        0 0 0.5px color-mix(in srgb, var(--accent) 90%, transparent)
+      )
+      drop-shadow(0 0 1.5px color-mix(in srgb, var(--accent) 10%, transparent));
+  }
+
+  38% {
+    filter: brightness(1.1)
+      drop-shadow(
+        0 0 1.5px color-mix(in srgb, var(--accent) 90%, transparent)
+      )
+      drop-shadow(0 0 3px color-mix(in srgb, var(--accent) 10%, transparent));
+  }
+
+  50% {
+    filter: drop-shadow(
+        0 0 1px color-mix(in srgb, var(--accent) 90%, transparent)
+      )
+      drop-shadow(0 0 2.5px color-mix(in srgb, var(--accent) 10%, transparent));
+  }
+}
+
+@keyframes hooemi-membership-shine {
+  0%,
+  55%,
+  100% {
+    background-position: 160% 160%;
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 0.9;
+  }
+
+  38% {
+    background-position: -60% -60%;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin,
+  .animate-ping {
+    animation: none;
+  }
+
+  .membership-badge-glow {
+    animation: none;
+    filter: drop-shadow(
+      0 0 1px color-mix(in srgb, var(--accent) 90%, transparent)
+    );
+  }
+
+  .membership-badge-shine::after {
+    animation: none;
+    opacity: 0;
+  }
+}
