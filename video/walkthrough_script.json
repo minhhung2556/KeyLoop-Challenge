@@ -1,0 +1,130 @@
+{
+  "title": "Keyloop Sales Lead Management Tool",
+  "tts": {
+    "backend": "vieneu",
+    "mode": "v3turbo",
+    "model": "pnnbao-ump/VieNeu-TTS-v3-Turbo",
+    "voice": "Adam",
+    "device": "auto",
+    "rate": "+0%",
+    "pitch": "+0Hz"
+  },
+  "chapters": [
+    {
+      "id": "intro",
+      "title": "Intro and Scenario C",
+      "visual": "split_preview",
+      "preview": "demo_01_inbox.png",
+      "cards": [
+        "Lead Inbox with search and status filters",
+        "Lead detail plus chronological timeline",
+        "Persist follow-up activity"
+      ],
+      "badges": ["Inbox", "Detail", "Activity log"],
+      "lines": [
+        "This is a local development walkthrough of Keyloop Scenario C, Domain Demand: a sales lead management tool for dealership salespeople.",
+        "The salesperson is not hunting cold lists. Website inquiry forms already captured name, email, phone, vehicle interest, and a free-text message.",
+        "Speed matters. A Porsche Taycan test-drive request that sits overnight is a lost appointment. The tool is a workspace for triage, context, and a written follow-up trail.",
+        "Acceptance is three surfaces. The inbox lists every incoming lead. Clicking a row opens the full record plus a chronological activity log. Logging a follow-up such as Called customer must persist, not live only in the browser.",
+        "We shipped a clone-and-run slice. FastAPI binds one two seven dot zero dot zero dot one port eight thousand with OpenAPI docs enabled. Next.js Pages Router binds port three thousand. SQLite file leads.db sits under the backend folder.",
+        "Out of scope on purpose: no cloud deploy, no Gunicorn workers, no Cloudflare, no multi-tenant login, and no extra KPI dashboard. The assessment asked for one cohesive layer. We chose a full-stack slice an evaluator can start with one command."
+      ]
+    },
+    {
+      "id": "design",
+      "title": "System design",
+      "visual": "architecture",
+      "preview": "demo_05_swagger_docs.png",
+      "cards": [
+        "Next.js on port 3000",
+        "FastAPI on port 8000",
+        "LeadService plus SQLite WAL"
+      ],
+      "badges": ["X-Request-ID", "PII-masked logs", "new to contacted"],
+      "lines": [
+        "Traffic is simple. The browser talks to a thin REST router. The router calls LeadService. LeadService calls SQLiteLeadRepository. CORS, request IDs, and request logging wrap every hop.",
+        "Pydantic v2 models use extra forbid and camelCase fields. Email is lowercased. Phone strips spaces, dashes, and parentheses, then must match an international digit pattern. Message length is twenty to two thousand characters.",
+        "Two tables, not one blob. leads holds contact, vehicleInterest, status, attribution, and createdAt. lead_activities holds type, summary, notes, createdBy, and createdAt, with a foreign key back to the lead.",
+        "SQLite runs write-ahead logging and foreign keys. All SQL is parameterized. Disk I O runs in a worker thread so the async event loop does not block on sqlite.",
+        "Status is a closed enum: new, contacted, closed. Activity types are call, email, note, and status change. Activities are append-only. A note never mutates status. A first call or email on a new lead flips status to contacted in the same write.",
+        "Inbox query is GET api v one leads with optional status and q. Sort is createdAt descending. Search is case-insensitive across name, email, phone, vehicle, message, and attribution. Detail is GET by id and returns activities sorted createdAt ascending.",
+        "The UI is Next.js Pages Router plus TanStack Query. Query keys live in one module. Screens follow pending skeleton, then error with retry, then empty, then content. The accent token is bg-blue-twenty, hex zero zero B five D eight.",
+        "Every response carries X-Request-ID. Error bodies are detail with error_code and message, plus request_id at the top level. Request logs mask email and phone. structlog emits only lead_created, lead_status_updated, lead_activity_logged, and db_operation_failed."
+      ]
+    },
+    {
+      "id": "ai",
+      "title": "AI collaboration",
+      "visual": "workflow",
+      "preview": "demo_01_inbox.png",
+      "cards": [
+        "Frozen local-only plan and Cursor rules",
+        "Reuse proven lead and logging patterns",
+        "verify.py after each batch"
+      ],
+      "badges": ["pytest", "typecheck", "no extra libraries"],
+      "lines": [
+        "Direction came before generation. Challenge PDFs were cached in the repo so later sessions did not re-scan them. AGENTS.md and a frozen implementation plan named the three surfaces and the local bind addresses.",
+        "Cursor rules split by layer. Backend files keep routers thin and domain logic in LeadService. Frontend files keep query keys centralized and map error_code plus request_id for humans. Video files stay at nineteen twenty by ten eighty and thirty frames.",
+        "Composer two point five edited two to four files per step. After each batch we ran scripts verify.py, not a visual glance. Ambiguous extras were questions, not silent features.",
+        "pytest hits create two oh one, validation four two two, missing lead four zero four with LEAD_NOT_FOUND, chronological order, and the call-driven status write. Frontend node tests hit phone digits, attribution chips, error mapping, and activity sort. Typecheck is npm run typecheck.",
+        "Libraries were not added because they were convenient. No metrics endpoint. No production process manager. The walkthrough voice is VieNeu turbo preset Adam, muxed with FFmpeg and local fonts. That constraint is how the slice stayed reviewable."
+      ]
+    },
+    {
+      "id": "demo",
+      "title": "Application demo",
+      "visual": "demo_sequence",
+      "steps": [
+        {
+          "screenshot": "demo_01_inbox.png",
+          "badge": "Step 1 · Lead Inbox & Status Pills"
+        },
+        {
+          "screenshot": "demo_02_filter_search.png",
+          "badge": "Step 2 · Search & Status Filter"
+        },
+        {
+          "screenshot": "demo_03_lead_detail.png",
+          "badge": "Step 3 · Lead Detail & Chronological Log"
+        },
+        {
+          "screenshot": "demo_04_log_activity.png",
+          "badge": "Step 4 · POST /api/v1/leads/{id}/activities (new to contacted)"
+        },
+        {
+          "screenshot": "demo_05_swagger_docs.png",
+          "badge": "Step 5 · OpenAPI Contract (:8000/docs)"
+        }
+      ],
+      "lines": [
+        "Open one two seven dot zero dot zero dot one port three thousand. Seeded rows appear newest first: Duc Le on a Hyundai Ioniq six, Lan Nguyen on a twenty twenty six Porsche Taycan, Minh Tran on a BMW i four, then contacted and closed records further down.",
+        "Pills are All, New, Contacted, Closed. Choosing New hides Sarah Chen and Emily Watson. Typing Porsche and submitting search leaves only Lan Nguyen, still New, with the vehicle line visible on the card.",
+        "Select that card. The right pane loads contact, plus eight four nine oh one one one two two three three, the Taycan interest, and the original weekend test-drive message. Attribution chips appear when U T M fields exist. The status control stays on New until we write a follow-up.",
+        "Activity log starts empty. Type is call. Summary defaults to Called customer. Optional notes stay blank. Save activity posts to api v one leads, lead id, activities. The log gains one row oldest first. The badge becomes Contacted without a separate patch.",
+        "The New filter then shows an empty inbox, because Lan is no longer new. That is the intended salesperson view, not a bug. Switch to All or Contacted to keep working the same record.",
+        "Contract checks live on port eight thousand slash docs. Create lead, list leads, get detail, patch status, and create activity are the five lead operations. Invalid bodies return four two two. Unknown ids return four zero four. Health is a separate GET."
+      ]
+    },
+    {
+      "id": "lessons",
+      "title": "Lessons learned",
+      "visual": "summary",
+      "preview": "demo_04_log_activity.png",
+      "cards": [
+        "Keep the slice small and persist the plan",
+        "Verify after each file batch",
+        "Reuse structured request logging",
+        "Local SQLite, uvicorn, and next dev only"
+      ],
+      "badges": ["Inbox", "Detail", "Persist follow-up"],
+      "lines": [
+        "Write the plan into the repo. A later session should open implementation-plan.md, not reopen the challenge brief.",
+        "Treat verify.py as a gate, not a souvenir. If typecheck or pytest fails, stop the batch. Do not stack more UI on a red check.",
+        "One log dialect is enough. Mask PII at the request boundary. Put request_id on the error the salesperson might screenshot.",
+        "Local assessment runtime is SQLite, uvicorn, and next dev. Adding production process managers for a clone demo costs review time and adds nothing the rubric asked for.",
+        "That is the walkthrough. Inbox for triage, detail for context, persisted follow-up for the paper trail. Thank you."
+      ]
+    }
+  ]
+}
