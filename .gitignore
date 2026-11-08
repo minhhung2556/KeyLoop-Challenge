@@ -1,0 +1,9 @@
+backend/leads.db
+backend/__pycache__/
+**/__pycache__/
+frontend/node_modules/
+frontend/.next/
+video/work/
+video/output/
+*.pyc
+.env
