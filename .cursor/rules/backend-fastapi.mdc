@@ -1,0 +1,14 @@
+---
+description: FastAPI Pydantic v2 leads API conventions
+globs: backend/**/*.py
+alwaysApply: false
+---
+
+# Backend
+
+- Pydantic v2: `ConfigDict(extra="forbid")`, camelCase fields, `StrEnum`.
+- Thin routers under `/api/v1`. Domain logic in `LeadService`.
+- `Annotated` deps from `app.dependencies`. SQLite I/O via `run_in_thread`.
+- Errors: `{"detail": {"error_code": "...", "message": "..."}, "request_id": "..."}`.
+- Critical logs only: `lead_created`, `lead_status_updated`, `lead_activity_logged`, `db_operation_failed`.
+- Parameterized SQL only. No `print()` for ops logs.

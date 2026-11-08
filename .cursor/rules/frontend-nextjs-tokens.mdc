@@ -1,0 +1,13 @@
+---
+description: Next.js leads UI, query keys, and #00B5D8 tokens
+globs: frontend/**/*.{ts,tsx,css,js,mjs}
+alwaysApply: false
+---
+
+# Frontend
+
+- Query keys only in `src/hooks/queryKeys.ts`.
+- Async UI: pending (skeleton) -> error (retry) -> empty -> content.
+- Map `error_code` + `request_id` via `mapLeadErrorMessage`.
+- Primary: `#00B5D8`. Utility `.bg-blue-20` is `rgba(0, 181, 216, 1)`.
+- Do not hardcode hex in JSX. Use semantic tokens (`bg-accent`, `text-foreground`).

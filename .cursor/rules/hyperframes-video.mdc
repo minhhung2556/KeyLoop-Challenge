@@ -1,0 +1,12 @@
+---
+description: HyperFrames walkthrough composition rules
+globs: video/**/*,scripts/build_walkthrough_video.py
+alwaysApply: false
+---
+
+# HyperFrames video
+
+- Standalone root: `#stage.clip` with `data-composition-id="keyloop"`, 1920x1080, 30fps.
+- One paused GSAP timeline: `window.__timelines["keyloop"] = tl`.
+- Use `gsap.fromTo`. Do not tween `visibility`/`autoAlpha` on `.clip`.
+- Bundle local `vendor/gsap.min.js` and `@font-face` files. No CDN fonts.

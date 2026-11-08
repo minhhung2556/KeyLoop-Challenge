@@ -1,0 +1,13 @@
+---
+description: Composer 2.5 local-dev execution contract for Keyloop Scenario C
+alwaysApply: true
+---
+
+# Composer execution
+
+- Inspect `AGENTS.md` and `docs/challenge/implementation-plan.md` before edits.
+- Local dev only (`127.0.0.1:8000`, `127.0.0.1:3000`, SQLite `backend/leads.db`).
+- Never add unapproved libraries, endpoints, or production deploy files.
+- If a requirement is ambiguous, stop and ask.
+- Edit 2 to 4 files per step. Run `python scripts/verify.py` before finishing.
+- Concise bullets. No preamble or postamble.
